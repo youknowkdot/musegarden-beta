@@ -1,0 +1,17 @@
+PASS: E1a block message at <1.5 (from B5 evidence)
+FAIL: E1b source: block condition is strictly < 1.5 (==1.5 allowed)
+    
+FAIL: E2 demo stage while unplanted: stays unplanted
+    
+FAIL: E3a at 45d speed forced to pause
+    
+FAIL: E3b after scrub-back speed stays paused (user must resume)
+    
+PASS: E3c user can resume after scrub-back
+PASS: E4 no double-plant (single plant event)
+PASS: E5 quest shows DONE + disabled
+PASS: E6 bounty shows CLAIMED + disabled
+PASS: E7 event log capped at 120
+FAIL: E8 germination progress advances (0d -> 1d)
+     -> 
+EDGE: 6 pass, 5 fail
