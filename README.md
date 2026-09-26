@@ -7,7 +7,8 @@ A playable demo slice of MuseGarden's core loop: plant a Kindred Tree seed orb, 
 ## Contents
 
 - `musegarden-beta-slice.html`: the playable beta. A single static file (no build step, no backend, no network calls). Open it in any modern browser.
-- `beta-pressure-test-receipts.md`: the full QA teardown: 135 automated checks plus a live-browser playtest, every finding with its repro and resolution. No open issues.
+- `beta-pressure-test-receipts.md`: the full QA teardown: 141 automated checks plus a live-browser playtest, every finding with its repro and resolution. No open P0/P1 issues.
+- `musegarden-concept-public.md`: the full project concept. Every decision tagged [LOCKED], [PROPOSED], or [OPEN]. The single source of truth for the design.
 - `evidence/screenshots/`: five screenshots captured during the live-browser pass.
 
 ## Playing it
