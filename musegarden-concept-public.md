@@ -262,7 +262,7 @@ Unresolved **[OPEN]**: absolute prices (set at launch).
 ## 12. Contracts
 
 - **License [LOCKED 2026-09-24]:** MIT, single license for the whole repo. Copyright line carries no personal names. A LICENSE file sits at the repo root.
-- Renamed and verified 2026-09-21: `MuseGardenToken.sol`, `SeedItems.sol`, `SeedSale.sol`. Constructor: `ERC20("MuseGarden", "MUSEGARDEN")`. `forge build` green; **194/194 tests pass** (incl. 128,000 invariant calls). Uncommitted, the repo was already dirty.
+- Renamed and verified 2026-09-21: `MuseGardenToken.sol`, `SeedItems.sol`, `SeedSale.sol`. Constructor: `ERC20("MuseGarden", "MUSEGARDEN")`. `forge build` green; **194/194 tests pass** (incl. 128,000 invariant calls). Full output of the 2026-09-25 re-run published: `qa/contracts/forge-test-output-2026-09-25.txt` (contract source stays private; the log is the complete forge output).
 - Built **only after mechanics lock**: vesting/treasury router, royalty splitter, $MUSEBOOK buyback-and-burn executor, plant-stand purchase mechanics (if confirmed), full rewrite on the new identifiers.
 
 ---
@@ -309,6 +309,7 @@ Unresolved **[OPEN]**: absolute prices (set at launch).
 | 2026-09-21 | Plant-stand direction proposed (commons/uncommons for sale, rares gated, top tiers lottery-only) |
 | 2026-09-21 | Personal + community-facing gardens proposed |
 | 2026-09-21 | Contract identifiers renamed; 194/194 tests green |
+| 2026-09-25 | Contract tests re-run clean (194/194, 128,000 invariant calls); full forge output published under qa/contracts/ |
 | 2026-09-21 | Town share locked: 2/15 of vesting + 50% of NFT royalties; never via the designated recipient's wallet |
 | 2026-09-21 | No fixed launch date; quality over schedule |
 | 2026-09-22 | No wearables route; plants live on the MuseGarden site; town integration only if Wynjr wants it later; frames/wearables parked; Sept-20 Wynjr gate superseded |
