@@ -1,0 +1,797 @@
+<!-- Status: Public-Facing -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <title>MuseGarden Beta Slice</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap');
+
+    :root {
+      color-scheme: light dark;
+      --bg: #d9d0b7;
+      --bg-deep: #bdb596;
+      --panel: #f5edda;
+      --panel-2: #eee2c8;
+      --ink: #2f3424;
+      --muted: #68644f;
+      --line: #ad9971;
+      --green: #556a38;
+      --green-bright: #768b4b;
+      --green-deep: #34492b;
+      --gold: #9a6f24;
+      --gold-soft: #d7bd78;
+      --soil: #765236;
+      --soil-dark: #473426;
+      --water: #557f77;
+      --danger: #9a4e37;
+      --shadow: 0 18px 42px rgba(72, 54, 28, .18);
+      --radius-lg: 10px;
+      --radius-md: 7px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #514936;
+        --bg-deep: #3f392c;
+        --panel: #615641;
+        --panel-2: #6c6048;
+        --ink: #fff1d2;
+        --muted: #ded0b2;
+        --line: #978461;
+        --green: #b3be7e;
+        --green-bright: #c6cf8b;
+        --green-deep: #8e9d65;
+        --gold: #efd084;
+        --gold-soft: #a98c4d;
+        --soil: #a77b59;
+        --soil-dark: #594434;
+        --water: #8abbb0;
+        --danger: #efaa88;
+        --shadow: 0 20px 48px rgba(35, 25, 15, .28);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(118, 82, 54, .09) 0 1px, transparent 1.6px) 0 0 / 29px 31px,
+        radial-gradient(circle at 74% 67%, rgba(154, 111, 36, .07) 0 1px, transparent 1.5px) 0 0 / 37px 43px,
+        linear-gradient(145deg, var(--bg-deep), var(--bg));
+      color: var(--ink);
+      font-family: "Nunito Sans", sans-serif;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+    button, input { font: inherit; color: inherit; }
+    button:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+    .app {
+      width: min(1440px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px clamp(14px, 2.4vw, 34px) 14px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+    }
+
+    .topbar { min-width: 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+    .heading-wrap { min-width: 0; display: flex; align-items: center; gap: 12px; padding-top: 4px; }
+    h1 { margin: 0; font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: clamp(30px, 3.4vw, 46px); line-height: .95; letter-spacing: -.025em; font-weight: 700; }
+    .beta-badge { flex: 0 0 auto; padding: 5px 9px; border: 1px solid var(--gold); border-radius: 999px; color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: .09em; }
+    .clock-cluster { width: min(610px, 58vw); display: grid; grid-template-columns: auto auto auto; align-items: center; justify-content: end; gap: 7px 10px; }
+    .demo-clock { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ink); padding: 8px 11px; border-bottom: 1px solid var(--line); }
+    .demo-clock.timeline-ended { color: var(--gold); font-weight: 700; }
+    .speed-control { display: flex; align-items: center; gap: 4px; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+    .speed-btn, .reset-btn { border: 0; background: transparent; border-radius: 8px; min-height: 32px; padding: 6px 9px; cursor: pointer; color: var(--muted); transition: background .15s ease, color .15s ease; }
+    .speed-btn:hover, .reset-btn:hover { color: var(--ink); background: var(--panel-2); }
+    .speed-btn.active { color: var(--panel); background: var(--green); }
+    .speed-btn svg, .reset-btn svg { width: 15px; height: 15px; display: block; }
+    .reset-btn { display: flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: var(--panel); }
+    .timeline-control { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(180px, 1fr) 68px; align-items: center; gap: 9px; color: var(--muted); }
+    .timeline-control label { font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+    .timeline-readout { font-size: 10px; font-weight: 700; text-align: right; color: var(--gold); font-variant-numeric: tabular-nums; }
+    .timeline-slider { width: 100%; min-width: 0; accent-color: var(--green); cursor: ew-resize; }
+    .timeline-slider::-webkit-slider-runnable-track { height: 4px; border-radius: 99px; background: var(--line); }
+    .timeline-slider::-webkit-slider-thumb { margin-top: -5px; }
+
+    .workspace { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 390px); gap: 14px; }
+    .tree-shell, .side-panel { background: color-mix(in srgb, var(--panel) 96%, transparent); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .tree-shell { border-radius: 26px 10px 24px 12px; padding: clamp(18px, 2.2vw, 30px); min-height: 650px; overflow: hidden; position: relative; display: grid; grid-template-rows: auto 1fr auto; }
+    .tree-shell::before { content: ""; position: absolute; inset: 9px; border: 1px solid color-mix(in srgb, var(--line) 52%, transparent); border-radius: 21px 7px 20px 9px; pointer-events: none; }
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; position: relative; z-index: 1; }
+    .section-head h2 { margin: 0; font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: 25px; line-height: 1; letter-spacing: -.01em; }
+    .section-head p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .section-head .art-note { display: inline-block; margin-top: 9px; padding: 4px 7px; border: 1px solid var(--gold-soft); border-radius: 4px; background: color-mix(in srgb, var(--gold) 8%, transparent); color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: .045em; }
+    .stage-readout { color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: .09em; text-align: right; }
+
+    .tree-button { appearance: none; border: 0; background: transparent; min-width: 0; min-height: 430px; padding: 14px; cursor: pointer; position: relative; display: grid; place-items: end center; overflow: hidden; }
+    .tree-button:disabled { cursor: default; }
+    .tree-art-stack { display: block; width: min(560px, 94%); height: min(500px, 57vh); max-height: 100%; position: relative; }
+    .tree-growth { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .tree-growth { z-index: 1; transform: translateY(var(--tree-droop, 0)) rotate(var(--tree-tilt, 0deg)) scale(var(--tree-scale, 1)); transform-origin: 50% 76%; filter: drop-shadow(0 15px 18px rgba(91, 62, 30, .16)); transition: transform .35s ease, filter .35s ease; }
+    .placeholder-leaf { fill: #295f47; }
+    .placeholder-leaf.light { fill: #4c7f5b; }
+    .placeholder-branch { fill: none; stroke: #6f442c; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+    .placeholder-fruit { fill: #d0a33d; stroke: #f2d77d; stroke-width: 2; }
+    .placeholder-orb { fill: #34694f; stroke: #cbdab9; stroke-width: 5; }
+    .placeholder-orb-mark { fill: none; stroke: #b7d7c2; stroke-width: 6; stroke-linecap: round; }
+    .tree-button.germinating::before { content: ""; position: absolute; left: 50%; bottom: 12%; width: min(290px, 56%); aspect-ratio: 1; border: 2px solid rgba(180, 135, 55, .48); border-radius: 50%; transform: translateX(-50%); animation: germinate 2.2s ease-in-out infinite; }
+    .tree-button.thirsty .tree-growth { --tree-tilt: 1.5deg; --tree-droop: 3px; filter: saturate(.85) brightness(.97) drop-shadow(0 15px 18px rgba(91, 62, 30, .16)); }
+    .tree-button.withering .tree-growth { --tree-tilt: 4.5deg; --tree-droop: 7px; filter: saturate(.45) sepia(.35) brightness(.92) drop-shadow(0 15px 18px rgba(91, 62, 30, .16)); }
+    .soil-target { width: min(360px, 72%); aspect-ratio: 1; border-radius: 50%; border: 2px dashed var(--line); background: radial-gradient(circle, rgba(154, 111, 36, .08), transparent 67%); display: grid; place-items: center; color: var(--soil-dark); }
+    .soil-target.ready { border-color: var(--green); background: radial-gradient(circle, rgba(85, 106, 56, .13), transparent 68%); }
+    .soil-copy { position: relative; z-index: 2; font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: 19px; font-weight: 700; }
+    .water-fx { position: absolute; z-index: 4; width: 120px; height: 150px; top: 76px; left: calc(50% - 60px); pointer-events: none; opacity: 0; }
+    .tree-button.watering .water-fx { animation: pour .8s ease-out; }
+    @keyframes pour { 0% { opacity: 0; transform: translateY(-18px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(55px); } }
+    @keyframes germinate { 0%, 100% { opacity: .28; transform: translateX(-50%) scale(.94); box-shadow: 0 0 18px rgba(180, 135, 55, .18); } 50% { opacity: .82; transform: translateX(-50%) scale(1.04); box-shadow: 0 0 42px rgba(180, 135, 55, .34); } }
+    @media (prefers-reduced-motion: reduce) { .tree-button.watering .water-fx { animation: none; opacity: .85; } .tree-button.germinating::before { animation: none; opacity: .55; } * { scroll-behavior: auto !important; } }
+
+    .tree-meta { width: min(640px, 100%); margin: 0 auto; position: relative; z-index: 2; }
+    .tree-title-row, .status-row, .progress-label { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .tree-name { font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: 23px; font-weight: 700; }
+    .stage-pill { font-size: 10px; color: var(--gold); font-weight: 700; letter-spacing: .06em; }
+    .status-row { margin-top: 7px; font-size: 12px; }
+    .water-status { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+    .water-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green-bright); }
+    .tree-button.thirsty + .tree-meta .water-status { color: var(--gold); }
+    .tree-button.thirsty + .tree-meta .water-status::before { background: var(--gold); }
+    .tree-button.withering + .tree-meta .water-status { color: var(--danger); }
+    .tree-button.withering + .tree-meta .water-status::before { background: var(--danger); }
+    .next-water { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .035em; }
+    .progress-label { color: var(--muted); font-size: 10px; font-weight: 700; margin-top: 10px; letter-spacing: .03em; }
+    .progress-track { height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--line) 72%, transparent); margin-top: 6px; overflow: hidden; }
+    .progress-fill { height: 100%; width: var(--progress); border-radius: inherit; background: linear-gradient(90deg, var(--green), var(--gold)); transition: width .2s linear; }
+    .stage-jump { margin-top: 13px; padding-top: 11px; border-top: 1px solid color-mix(in srgb, var(--line) 58%, transparent); display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; }
+    .stage-jump-label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+    .stage-jump-buttons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+    .stage-jump-btn { min-height: 30px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--muted); font-size: 9px; font-weight: 700; cursor: pointer; }
+    .stage-jump-btn:hover:not(:disabled) { border-color: var(--green); color: var(--ink); }
+    .stage-jump-btn.current { border-color: var(--green); background: var(--green); color: var(--panel); }
+    .stage-jump-btn:disabled { cursor: default; opacity: .48; }
+    .stage-jump-btn.current:disabled { opacity: 1; }
+
+    .side-panel { border-radius: 10px 26px 12px 24px; padding: 17px; min-height: 0; display: grid; grid-template-rows: auto auto auto auto minmax(150px, 1fr); gap: 15px; }
+    .side-section { min-width: 0; }
+    .side-title { margin: 0 0 9px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: 17px; font-weight: 700; }
+    .side-title .label { display: inline-flex; align-items: center; gap: 7px; }
+    .side-title svg { width: 16px; height: 16px; color: var(--green); }
+    .subtle { color: var(--muted); font-family: "Nunito Sans", sans-serif; font-size: 8px; font-weight: 700; letter-spacing: .06em; }
+
+    .seed-card { width: 100%; border: 1px solid var(--line); background: var(--panel-2); border-radius: 16px 16px 8px 12px; padding: 8px 12px 8px 8px; text-align: left; cursor: pointer; display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; align-items: center; transition: border-color .15s ease, background .15s ease; }
+    .seed-card:hover { border-color: var(--green); }
+    .seed-card.selected { border-color: var(--green); background: color-mix(in srgb, var(--green) 10%, var(--panel-2)); box-shadow: inset 0 0 0 1px var(--green); }
+    .seed-card.planted { cursor: default; opacity: .72; }
+    .seed-thumb { width: 62px; height: 62px; display: block; object-fit: contain; object-position: center; filter: drop-shadow(0 5px 7px rgba(91, 62, 30, .18)); }
+    .seed-name { display: block; font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: 16px; font-weight: 700; }
+    .seed-detail { display: block; font-size: 9px; color: var(--muted); margin-top: 3px; }
+    .orb-state { color: var(--gold); font-size: 8px; font-weight: 700; letter-spacing: .05em; }
+
+    .reservoir-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px 20px 10px 20px; padding: 12px; display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+    .gauge { width: 58px; height: 100px; border: 2px solid var(--line); border-radius: 24px 24px 12px 12px; padding: 4px; position: relative; overflow: hidden; margin: 0 auto; background: var(--panel); }
+    .gauge-fill { position: absolute; left: 4px; right: 4px; bottom: 4px; height: var(--water-level); border-radius: 16px 16px 8px 8px; background: linear-gradient(180deg, #91bcb0, var(--water)); transition: height .2s linear; }
+    .gauge-fill::before { content: ""; position: absolute; left: -8%; right: -8%; top: -5px; height: 10px; border-radius: 50%; background: #accfc5; }
+    .gauge-marks { position: absolute; inset: 9px 7px; border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); z-index: 2; opacity: .55; }
+    .reservoir-number { font-family: "Cormorant Garamond", Georgia, "Iowan Old Style", serif; font-size: 29px; font-weight: 700; line-height: 1; }
+    .reservoir-number small { font-family: "Nunito Sans", sans-serif; font-size: 10px; color: var(--muted); }
+    .mock-label { display: inline-block; margin-top: 7px; color: var(--gold); font-size: 8px; font-weight: 700; letter-spacing: .08em; border: 1px solid var(--gold-soft); border-radius: 4px; padding: 3px 5px; }
+    .hose { width: 100%; height: 34px; color: var(--green); margin-top: 5px; }
+    .evap-note { margin-top: 2px; color: var(--muted); font-size: 10px; }
+
+    .quest-list, .bounty-list { display: grid; gap: 6px; }
+    .quest, .bounty { width: 100%; border: 1px solid var(--line); background: var(--panel-2); border-radius: 11px 14px 8px 12px; padding: 9px 10px; text-align: left; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+    .quest:hover:not(:disabled), .bounty:hover:not(:disabled) { border-color: var(--green); background: color-mix(in srgb, var(--green) 8%, var(--panel-2)); }
+    .quest:disabled, .bounty:disabled { cursor: default; opacity: .58; }
+    .bounty.claimable { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, var(--panel-2)); }
+    .quest-name, .bounty-name { display: block; font-size: 11px; font-weight: 700; }
+    .quest-reward, .bounty-reward { display: block; margin-top: 2px; color: var(--muted); font-size: 8px; }
+    .quest-state, .bounty-state { color: var(--green); font-size: 8px; font-weight: 700; letter-spacing: .05em; }
+    .bounty-state { color: var(--gold); }
+    .xp-note { color: var(--muted); font-size: 9px; margin-top: 6px; line-height: 1.4; }
+
+    .event-wrap { min-height: 0; display: flex; flex-direction: column; }
+    .event-log { flex: 1; min-height: 145px; max-height: 220px; overflow-y: auto; background: color-mix(in srgb, var(--panel-2) 82%, var(--panel)); border: 1px solid var(--line); border-radius: 16px 10px 14px 8px; padding: 7px 11px; scrollbar-color: var(--line) transparent; }
+    .event { display: grid; grid-template-columns: 52px 1fr; gap: 9px; padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 58%, transparent); font-family: Georgia, "Iowan Old Style", serif; font-size: 11px; line-height: 1.4; }
+    .event:last-child { border-bottom: 0; }
+    .event-time { color: var(--gold); font-family: "Nunito Sans", sans-serif; font-size: 9px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .event-text { color: var(--muted); }
+
+    .footer { color: var(--muted); font-size: 10px; text-align: center; padding: 2px 0; }
+    .toast { position: fixed; z-index: 20; left: 50%; bottom: 24px; transform: translate(-50%, 18px); background: var(--ink); color: var(--panel); border-radius: 999px; padding: 9px 14px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; font-size: 11px; max-width: calc(100vw - 28px); text-align: center; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 980px) {
+      .workspace { grid-template-columns: 1fr; }
+      .tree-shell { min-height: 600px; }
+      .side-panel { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto minmax(170px, auto); }
+      .event-wrap { grid-column: 1 / -1; }
+      .event-log { max-height: 190px; }
+    }
+    @media (max-width: 700px) {
+      .app { padding-top: 12px; }
+      .topbar { flex-direction: column; }
+      .heading-wrap { align-items: flex-start; }
+      .clock-cluster { width: 100%; grid-template-columns: 1fr auto auto; justify-content: stretch; }
+      .demo-clock { text-align: left; padding-left: 2px; }
+      .timeline-control { grid-template-columns: auto minmax(110px, 1fr) 60px; }
+      .speed-btn { padding: 6px 7px; }
+      .reset-btn span { display: none; }
+      .tree-shell { min-height: 550px; padding: 14px; }
+      .tree-button { min-height: 360px; padding-inline: 0; }
+      .tree-art-stack { height: 360px; width: 100%; }
+      .soil-target { bottom: 46px; }
+      .side-panel { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto auto; }
+      .event-wrap { grid-column: auto; }
+    }
+    @media (max-width: 410px) {
+      h1 { font-size: 23px; }
+      .heading-wrap { flex-direction: column; gap: 7px; }
+      .clock-cluster { gap: 6px; }
+      .tree-shell { min-height: 520px; }
+      .tree-button { min-height: 330px; }
+      .tree-art-stack { height: 325px; }
+      .tree-name { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="topbar">
+      <div class="heading-wrap">
+        <h1>Kindred Tree</h1>
+        <span class="beta-badge">BETA SLICE</span>
+      </div>
+      <div class="clock-cluster">
+        <div class="demo-clock" id="demoClock" aria-live="polite">Day 0 + 00:00 elapsed</div>
+        <div class="speed-control" aria-label="Demo clock speed">
+          <button class="speed-btn" type="button" data-speed="0" aria-label="Pause demo time" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+          <button class="speed-btn" type="button" data-speed="1" aria-pressed="false">1x</button>
+          <button class="speed-btn active" type="button" data-speed="60" aria-pressed="true">60x</button>
+          <button class="speed-btn" type="button" data-speed="240" aria-pressed="false">240x</button>
+          <button class="speed-btn" type="button" data-speed="1440" aria-pressed="false">1440x</button>
+        </div>
+        <button class="reset-btn" id="resetBtn" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 11a8 8 0 1 1 2.34 5.66M4 11V5m0 6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Reset demo</span></button>
+        <div class="timeline-control">
+          <label for="timelineSlider">SCRUB TIME</label>
+          <input class="timeline-slider" id="timelineSlider" type="range" min="0" max="45" step="0.1" value="0" aria-label="Move demo time backward or forward across 45 days" />
+          <output class="timeline-readout" id="timelineReadout" for="timelineSlider">DAY 0.0</output>
+        </div>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <section class="tree-shell" aria-labelledby="treeHeading">
+        <div class="section-head">
+          <div><h2 id="treeHeading">A single slow-growing tree</h2><p>Select its orb, plant it, then return when it needs water.</p><p class="art-note">PLACEHOLDER ART · FINAL 2D ARTWORK IN DEVELOPMENT</p></div>
+          <div class="stage-readout" id="stageReadout">UNPLANTED</div>
+        </div>
+        <button type="button" class="tree-button" id="treeButton" aria-label="Plant the selected Kindred Tree orb in the planting circle"></button>
+        <div class="tree-meta" id="treeMeta"></div>
+      </section>
+
+      <aside class="side-panel" aria-label="Garden controls and activity">
+        <section class="side-section" aria-labelledby="walletTitle">
+          <h2 class="side-title" id="walletTitle"><span class="label"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5h14a2 2 0 0 1 2 2v8.5H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h13v3.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="16" cy="13" r="1.2" fill="currentColor"/></svg>Mock wallet</span><span class="subtle">1 ORB</span></h2>
+          <button type="button" class="seed-card" id="seedCard" aria-pressed="false"></button>
+        </section>
+
+        <section class="side-section" aria-labelledby="reservoirTitle">
+          <h2 class="side-title" id="reservoirTitle"><span class="label"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3S6.5 9.4 6.5 14a5.5 5.5 0 0 0 11 0C17.5 9.4 12 3 12 3Z" stroke="currentColor" stroke-width="1.8"/></svg>Reservoir and hose</span><span class="subtle">100 CAP</span></h2>
+          <div class="reservoir-card">
+            <div class="gauge" aria-label="Water reservoir level"><div class="gauge-fill" id="gaugeFill"></div><div class="gauge-marks"></div></div>
+            <div>
+              <div class="reservoir-number"><span id="reservoirValue">60.0</span><small> units</small></div>
+              <span class="mock-label">MOCK WATER</span>
+              <svg class="hose" viewBox="0 0 190 48" fill="none" aria-hidden="true"><path d="M5 33c25 0 24-19 47-19 20 0 21 21 42 21 25 0 22-25 49-25" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M140 5h24v14h-24zM164 9h13l8 7" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M184 16c-2 6-5 8-9 10M188 20c-1 5-4 8-7 11" stroke="#70cfbc" stroke-width="2" stroke-linecap="round"/></svg>
+              <div class="evap-note">5% daily evaporation, continuously</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="side-section" aria-labelledby="questTitle">
+          <h2 class="side-title" id="questTitle"><span class="label"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 12 3 3 7-7M5 4h14v16H5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Daily quests</span><span class="subtle" id="xpCount">0 XP</span></h2>
+          <div class="quest-list" id="questList"></div>
+          <div class="xp-note">Each quest refreshes every demo day. Completion adds 1 XP and immediately returns 1 unit to the reservoir.</div>
+        </section>
+
+        <section class="side-section" aria-labelledby="bountyTitle">
+          <h2 class="side-title" id="bountyTitle"><span class="label"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Bounties <span class="subtle">MOCK</span></span><span class="subtle">ONE-TIME</span></h2>
+          <div class="bounty-list" id="bountyList"></div>
+        </section>
+
+        <section class="side-section event-wrap" aria-labelledby="eventTitle">
+          <h2 class="side-title" id="eventTitle"><span class="label"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Event log</span><span class="subtle">OLDEST TO NEWEST</span></h2>
+          <div class="event-log" id="eventLog" role="log" aria-live="polite"></div>
+        </section>
+      </aside>
+    </section>
+
+    <footer class="footer">Demo slice: mock wallet, water, quests, bounties, and time controls are demo-only. Growth numbers are final.</footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var DAY = 24 * 60 * 60 * 1000;
+      var START = 8 * 60 * 60 * 1000;
+      var MAX_TIME = START + 45 * DAY;
+      var TREE = { name: "Kindred Tree", rarity: "Rare", growth: "Slow", appetite: 1.5, color: "#245d3d", thresholds: [16, 128, 400] };
+      var QUESTS = [
+        { id: "tend", name: "Tend the garden", note: "Check the tree's condition" },
+        { id: "journal", name: "Review the growth journal", note: "Read today's garden record" }
+      ];
+      var BOUNTIES = [
+        { id: "first-planting", name: "First Planting", note: "Plant the Kindred Tree seed", xp: 8 },
+        { id: "three-waterings", name: "Three Waterings", note: "Water the tree 3 times", xp: 15 },
+        { id: "sprout-emerges", name: "Sprout Emerges", note: "Tree reaches Sprout", xp: 25 }
+      ];
+
+      var currentTime = START;
+      var speed = 60;
+      var lastReal = Date.now();
+      var journal = [];
+      var selected = false;
+      var fxUntil = 0;
+      var toastTimer = null;
+      var sim = null;
+
+      var demoClock = document.getElementById("demoClock");
+      var timelineSlider = document.getElementById("timelineSlider");
+      var timelineReadout = document.getElementById("timelineReadout");
+      var treeButton = document.getElementById("treeButton");
+      var treeMeta = document.getElementById("treeMeta");
+      var stageReadout = document.getElementById("stageReadout");
+      var seedCard = document.getElementById("seedCard");
+      var reservoirValue = document.getElementById("reservoirValue");
+      var gaugeFill = document.getElementById("gaugeFill");
+      var questList = document.getElementById("questList");
+      var bountyList = document.getElementById("bountyList");
+      var xpCount = document.getElementById("xpCount");
+      var eventLog = document.getElementById("eventLog");
+      var toast = document.getElementById("toast");
+
+      function elapsedDays(ms) { return Math.max(0, (ms - START) / DAY); }
+      function pad(n) { return String(n).padStart(2, "0"); }
+      function clockText(ms) { var day = Math.floor(elapsedDays(ms)); var within = (ms - START) % DAY; return "Day " + day + " + " + pad(Math.floor(within / 3600000)) + ":" + pad(Math.floor((within % 3600000) / 60000)) + " elapsed"; }
+      function shortClock(ms) { var day = Math.floor(elapsedDays(ms)); var within = ms % DAY; return "D" + day + " " + pad(Math.floor(within / 3600000)) + ":" + pad(Math.floor((within % 3600000) / 60000)); }
+      function stageName(stage) { return ["Seed", "Sprout", "Bloom", "Canopy"][stage]; }
+      function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, function (c) { return ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[c]; }); }
+      function nudge(text) { toast.textContent = text; toast.classList.add("show"); window.clearTimeout(toastTimer); toastTimer = window.setTimeout(function () { toast.classList.remove("show"); }, 1800); }
+      function addEvent(target, time, text) { target.push({ time: time, text: text }); }
+
+      // Device-local persistence (Decision 2, LOCKED 2026-09-25, Option B).
+      // The page is event-sourced: the action journal + currentTime + speed fully
+      // determine state, and derive() replays them deterministically. So saving
+      // exactly those three values to localStorage is a complete snapshot.
+      // Nothing ever leaves the device; there is no network call anywhere.
+      var SAVE_KEY = "musegarden-beta-save-v1";
+      var SAVE_VERSION = 1;
+      var VALID_SPEEDS = [0, 1, 60, 240, 1440];
+
+      function saveState() {
+        try {
+          if (typeof localStorage === "undefined") return;
+          localStorage.setItem(SAVE_KEY, JSON.stringify({
+            version: SAVE_VERSION,
+            savedAt: Date.now(),
+            journal: journal,
+            currentTime: currentTime,
+            speed: speed
+          }));
+        } catch (err) {
+          // Storage full, blocked, or unavailable (e.g. private mode): the page
+          // keeps working ephemerally for this session. Persistence must never
+          // break the demo.
+        }
+      }
+
+      function clearSavedState() {
+        try {
+          if (typeof localStorage === "undefined") return;
+          localStorage.removeItem(SAVE_KEY);
+        } catch (err) { /* same as saveState: never break the demo */ }
+      }
+
+      function sanitizeAction(raw) {
+        if (!raw || typeof raw !== "object") return null;
+        var types = { plant: 1, water: 1, quest: 1, bounty: 1, stage: 1 };
+        if (!types[raw.type]) return null;
+        var time = Number(raw.time);
+        if (!isFinite(time) || time < START || time > MAX_TIME) return null;
+        var order = Number(raw.order);
+        if (!isFinite(order) || order < 0) return null;
+        var action = { type: raw.type, time: time, order: order };
+        if (raw.type === "quest") {
+          var q = QUESTS.filter(function (item) { return item.id === raw.questId; })[0];
+          if (!q) return null;
+          action.questId = q.id;
+        } else if (raw.type === "bounty") {
+          var b = BOUNTIES.filter(function (item) { return item.id === raw.bountyId; })[0];
+          if (!b) return null;
+          action.bountyId = b.id;
+        } else if (raw.type === "stage") {
+          var s = Number(raw.stage);
+          if (!isFinite(s) || s < 0 || s > 3) return null;
+          action.stage = Math.floor(s);
+        }
+        return action;
+      }
+
+      function loadState() {
+        try {
+          if (typeof localStorage === "undefined") return false;
+          var raw = localStorage.getItem(SAVE_KEY);
+          if (!raw) return false;
+          var data = JSON.parse(raw);
+          if (!data || typeof data !== "object" || data.version !== SAVE_VERSION) return false;
+          if (!Array.isArray(data.journal)) return false;
+          var t = Number(data.currentTime);
+          if (!isFinite(t)) return false;
+          var sp = Number(data.speed);
+          var clean = [];
+          data.journal.forEach(function (item) {
+            var action = sanitizeAction(item);
+            if (action) clean.push(action);
+          });
+          journal = clean;
+          currentTime = Math.max(START, Math.min(MAX_TIME, t));
+          speed = VALID_SPEEDS.indexOf(sp) === -1 ? 60 : sp;
+          return true;
+        } catch (err) {
+          // Corrupted save: fall back to a fresh garden, never a broken one.
+          return false;
+        }
+      }
+
+      function freshSim() {
+        return {
+          time: START,
+          reservoir: 60,
+          accountXp: 0,
+          completedQuests: {},
+          claimedBounties: {},
+          plant: { planted: false, xp: 0, stage: 0, waterings: 0, lastWatered: null, germinationEnds: null, germinated: false, sprouted: false },
+          events: [{ time: START, text: "Garden opened with one Kindred Tree orb and 60 mock water units." }]
+        };
+      }
+
+      function stageFloor(plant) { return plant.stage === 0 ? 0 : TREE.thresholds[plant.stage - 1]; }
+      function plantStatus(plant, at) {
+        if (!plant.planted) return "unplanted";
+        if (plant.germinationEnds !== null && !plant.germinated && at < plant.germinationEnds) return "germinating";
+        if (plant.lastWatered === null) return "thirsty";
+        var dryFor = at - plant.lastWatered;
+        if (dryFor > 2 * DAY) return "withering";
+        if (dryFor >= DAY) return "thirsty";
+        return "hydrated";
+      }
+
+      function advanceSim(target, to) {
+        if (to <= target.time) { target.time = to; return; }
+        var from = target.time;
+        var plant = target.plant;
+        target.reservoir *= Math.pow(0.95, (to - from) / DAY);
+        if (target.reservoir < 0.001) target.reservoir = 0;
+
+        if (plant.planted && plant.germinationEnds !== null && !plant.germinated && from < plant.germinationEnds && to >= plant.germinationEnds) {
+          plant.germinated = true;
+          plant.sprouted = true;
+          plant.xp = Math.max(plant.xp, TREE.thresholds[0]);
+          plant.stage = 1;
+          addEvent(target.events, plant.germinationEnds, "Germination complete. Kindred Tree reached Sprout.");
+        }
+
+        if (plant.planted && plant.lastWatered !== null) {
+          var thirstyAt = plant.lastWatered + DAY;
+          var witherAt = plant.lastWatered + 2 * DAY;
+          if (from < thirstyAt && to >= thirstyAt) addEvent(target.events, thirstyAt, "Kindred Tree became thirsty.");
+          if (from <= witherAt && to > witherAt) addEvent(target.events, witherAt, "Kindred Tree started withering.");
+          var decayStart = Math.max(from, witherAt);
+          if (to > decayStart && plant.germinated) plant.xp = Math.max(stageFloor(plant), plant.xp - 5 * ((to - decayStart) / DAY));
+        }
+        target.time = to;
+        target.events.sort(function (a, b) { return a.time - b.time; });
+      }
+
+      function updateStage(target, at) {
+        var plant = target.plant;
+        var old = plant.stage;
+        if (plant.xp >= TREE.thresholds[2]) plant.stage = 3;
+        else if (plant.xp >= TREE.thresholds[1]) plant.stage = 2;
+        else if (plant.germinated && plant.xp >= TREE.thresholds[0]) plant.stage = 1;
+        if (plant.stage >= 1) plant.sprouted = true;
+        if (plant.stage > old) addEvent(target.events, at, "Kindred Tree reached " + stageName(plant.stage) + ".");
+      }
+
+      function bountyUnlocked(id, target) {
+        if (id === "first-planting") return target.plant.planted;
+        if (id === "three-waterings") return target.plant.waterings >= 3;
+        if (id === "sprout-emerges") return !!target.plant.sprouted;
+        return false;
+      }
+
+      function applyAction(target, action) {
+        var plant = target.plant;
+        if (action.type === "plant" && !plant.planted) {
+          plant.planted = true;
+          addEvent(target.events, action.time, "Kindred Tree planted. Water it to begin germination.");
+        } else if (action.type === "stage" && plant.planted) {
+          var nextStage = Math.max(0, Math.min(3, action.stage));
+          plant.stage = nextStage;
+          plant.xp = nextStage === 0 ? 0 : TREE.thresholds[nextStage - 1];
+          plant.germinated = nextStage > 0;
+          plant.germinationEnds = null;
+          addEvent(target.events, action.time, "Demo growth set to " + stageName(nextStage) + " at " + Math.round(plant.xp) + " plant XP.");
+        } else if (action.type === "water" && plant.planted) {
+          var status = plantStatus(plant, action.time);
+          var canWater = plant.lastWatered === null || (status !== "hydrated" && status !== "germinating");
+          if (canWater && target.reservoir + 0.0001 >= TREE.appetite) {
+            var wasWithering = status === "withering";
+            target.reservoir -= TREE.appetite;
+            plant.xp += 10;
+            plant.waterings += 1;
+            plant.lastWatered = action.time;
+            if (!plant.germinated && plant.germinationEnds === null) {
+              plant.germinationEnds = action.time + 48 * 60 * 60 * 1000;
+              addEvent(target.events, action.time, "Kindred Tree watered for 1.5 units. +10 plant XP; germination started.");
+            } else {
+              if (wasWithering) addEvent(target.events, action.time, "Kindred Tree stopped withering.");
+              addEvent(target.events, action.time, "Kindred Tree watered for 1.5 units. +10 plant XP.");
+              updateStage(target, action.time);
+            }
+          }
+        } else if (action.type === "quest") {
+          var day = Math.floor(elapsedDays(action.time));
+          var key = day + ":" + action.questId;
+          if (!target.completedQuests[key]) {
+            target.completedQuests[key] = true;
+            target.accountXp += 1;
+            target.reservoir = Math.min(100, target.reservoir + 1);
+            var quest = QUESTS.filter(function (item) { return item.id === action.questId; })[0];
+            addEvent(target.events, action.time, quest.name + " completed. +1 XP, +1 reservoir unit.");
+          }
+        } else if (action.type === "bounty") {
+          var bounty = BOUNTIES.filter(function (item) { return item.id === action.bountyId; })[0];
+          if (bounty && !target.claimedBounties[bounty.id] && bountyUnlocked(bounty.id, target)) {
+            target.claimedBounties[bounty.id] = true;
+            target.accountXp += bounty.xp;
+            target.reservoir = Math.min(100, target.reservoir + bounty.xp);
+            addEvent(target.events, action.time, bounty.name + " claimed. +" + bounty.xp + " XP, +" + bounty.xp + " reservoir units.");
+          }
+        }
+      }
+
+      function derive(at) {
+        var target = freshSim();
+        journal.slice().sort(function (a, b) { return a.time - b.time || a.order - b.order; }).forEach(function (action) {
+          if (action.time > at) return;
+          advanceSim(target, action.time);
+          applyAction(target, action);
+        });
+        advanceSim(target, at);
+        return target;
+      }
+
+      function commitAction(action) {
+        journal = journal.filter(function (item) { return item.time <= currentTime; });
+        action.time = currentTime;
+        action.order = journal.length;
+        journal.push(action);
+        sim = derive(currentTime);
+        selected = false;
+        render();
+        saveState();
+      }
+
+      function seedArt() {
+        return '<svg class="seed-thumb" viewBox="0 0 80 80" role="img" aria-label="Kindred Tree seed orb"><circle cx="40" cy="41" r="27" fill="#dbe6cd" opacity=".7"/><circle class="placeholder-orb" cx="40" cy="41" r="21"/><path class="placeholder-orb-mark" d="M37 54c11-8 13-20 4-30M37 54c-7-5-10-11-10-17"/></svg>';
+      }
+
+      function treeArt(plant) {
+        if (!plant.planted) return '<div class="soil-target' + (selected ? ' ready' : '') + '"><span class="soil-copy">' + (selected ? 'Plant Kindred Tree' : 'Select the seed orb') + '</span></div>';
+        var labels = ["Kindred Tree seed stage placeholder", "Kindred Tree sprout stage placeholder", "Kindred Tree bloom stage placeholder", "Kindred Tree canopy stage placeholder"];
+        var scales = [0.72, 0.84, 1, 1.08];
+        var stages = [
+          '<circle class="placeholder-orb" cx="280" cy="315" r="35"/><path class="placeholder-orb-mark" d="M271 330c18-14 21-34 7-51M271 330c-10-7-14-16-15-27"/>',
+          '<path class="placeholder-branch" d="M280 380V276m0 46-49-40m49 15 51-46m-51 79 48-14"/><ellipse class="placeholder-leaf" cx="216" cy="267" rx="39" ry="24" transform="rotate(-13 216 267)"/><ellipse class="placeholder-leaf light" cx="248" cy="300" rx="40" ry="23" transform="rotate(38 248 300)"/><ellipse class="placeholder-leaf" cx="288" cy="238" rx="38" ry="24" transform="rotate(8 288 238)"/><ellipse class="placeholder-leaf light" cx="329" cy="282" rx="38" ry="23" transform="rotate(26 329 282)"/><ellipse class="placeholder-leaf" cx="347" cy="246" rx="42" ry="24" transform="rotate(-31 347 246)"/>',
+          '<path class="placeholder-branch" d="M280 382V220m0 80-63-60m63 27 65-68m-65 102 71-28m-71 2-69-24"/><ellipse class="placeholder-leaf" cx="198" cy="225" rx="54" ry="32" transform="rotate(-15 198 225)"/><ellipse class="placeholder-leaf light" cx="229" cy="277" rx="57" ry="32" transform="rotate(25 229 277)"/><ellipse class="placeholder-leaf" cx="279" cy="190" rx="56" ry="34"/><ellipse class="placeholder-leaf light" cx="331" cy="232" rx="58" ry="33" transform="rotate(-18 331 232)"/><ellipse class="placeholder-leaf" cx="368" cy="188" rx="53" ry="31" transform="rotate(-27 368 188)"/><ellipse class="placeholder-leaf light" cx="349" cy="285" rx="50" ry="29" transform="rotate(18 349 285)"/><rect x="370" y="276" width="28" height="35" rx="4" fill="#d2a34a" stroke="#78502c" stroke-width="5"/><path d="M376 276c1-16 17-16 17 0" fill="none" stroke="#78502c" stroke-width="4"/>',
+          '<path class="placeholder-branch" d="M280 384V182m0 120-76-72m76 27 83-84m-83 118 92-37m-92 1-90-37m90 20-48-94m48 87 57-94"/><ellipse class="placeholder-leaf" cx="174" cy="210" rx="70" ry="42" transform="rotate(-12 174 210)"/><ellipse class="placeholder-leaf light" cx="218" cy="280" rx="75" ry="40" transform="rotate(20 218 280)"/><ellipse class="placeholder-leaf" cx="270" cy="151" rx="76" ry="45"/><ellipse class="placeholder-leaf light" cx="340" cy="208" rx="82" ry="44" transform="rotate(-15 340 208)"/><ellipse class="placeholder-leaf" cx="398" cy="160" rx="68" ry="40" transform="rotate(-23 398 160)"/><ellipse class="placeholder-leaf light" cx="380" cy="286" rx="66" ry="38" transform="rotate(17 380 286)"/><ellipse class="placeholder-leaf" cx="212" cy="156" rx="62" ry="37" transform="rotate(17 212 156)"/><circle class="placeholder-fruit" cx="213" cy="205" r="9"/><circle class="placeholder-fruit" cx="305" cy="165" r="9"/><circle class="placeholder-fruit" cx="375" cy="211" r="9"/><circle class="placeholder-fruit" cx="341" cy="272" r="9"/><rect x="391" y="267" width="31" height="40" rx="5" fill="#d2a34a" stroke="#78502c" stroke-width="5"/><path d="M397 267c1-17 19-17 19 0" fill="none" stroke="#78502c" stroke-width="4"/>'
+        ];
+        return '<span class="tree-art-stack" style="--tree-scale:' + scales[plant.stage] + '"><svg class="tree-growth" viewBox="0 0 560 500" role="img" aria-label="' + labels[plant.stage] + '">' + stages[plant.stage] + '</svg></span>';
+      }
+      function waterFx() { return '<svg class="water-fx" viewBox="0 0 120 150" aria-hidden="true"><path d="M25 5S10 24 10 36a15 15 0 0 0 30 0C40 24 25 5 25 5ZM78 17S65 34 65 45a13 13 0 0 0 26 0c0-11-13-28-13-28ZM52 58S40 74 40 84a12 12 0 0 0 24 0c0-10-12-26-12-26Z" fill="#7fae9f" opacity=".92"/></svg>'; }
+
+      function progressFor(plant) {
+        if (!plant.planted) return { pct: 0, label: "PLANT TO BEGIN", amount: "0 XP" };
+        if (plant.germinationEnds !== null && !plant.germinated && currentTime < plant.germinationEnds) {
+          var pct = Math.max(0, Math.min(100, 100 * (1 - (plant.germinationEnds - currentTime) / (48 * 60 * 60 * 1000))));
+          return { pct: pct, label: "GERMINATING", amount: remainingTime(plant.germinationEnds - currentTime) };
+        }
+        if (plant.stage === 3) return { pct: 100, label: "FULL CANOPY", amount: Math.round(plant.xp) + " XP" };
+        var low = plant.stage === 0 ? 0 : TREE.thresholds[plant.stage - 1];
+        var high = TREE.thresholds[plant.stage];
+        return { pct: Math.max(0, Math.min(100, ((plant.xp - low) / (high - low)) * 100)), label: Math.ceil(high - plant.xp) + " XP TO " + stageName(plant.stage + 1).toUpperCase(), amount: plant.xp.toFixed(plant.xp % 1 ? 1 : 0) + " XP" };
+      }
+      function remainingTime(ms) { var hours = Math.floor(ms / 3600000); var minutes = Math.floor((ms % 3600000) / 60000); return hours + "H " + minutes + "M"; }
+      function nextWaterText(plant, status) {
+        if (!plant.planted) return "SELECT ORB";
+        if (status === "germinating") return "GERMINATING " + remainingTime(Math.max(0, plant.germinationEnds - currentTime));
+        if (plant.lastWatered === null || status === "thirsty" || status === "withering") return "TAP TREE TO WATER";
+        return "READY IN " + remainingTime(Math.max(0, DAY - (currentTime - plant.lastWatered)));
+      }
+
+      function renderWallet() {
+        var planted = sim.plant.planted;
+        seedCard.className = "seed-card" + (selected && !planted ? " selected" : "") + (planted ? " planted" : "");
+        seedCard.disabled = planted;
+        seedCard.setAttribute("aria-pressed", selected && !planted ? "true" : "false");
+        seedCard.innerHTML = seedArt() + '<span><span class="seed-name">Kindred Tree</span><span class="seed-detail">Rare · Slow growth</span></span><span class="orb-state">' + (planted ? "PLANTED" : selected ? "SELECTED" : "READY") + '</span>';
+      }
+
+      function renderTree() {
+        var plant = sim.plant;
+        var status = plantStatus(plant, currentTime);
+        var progress = progressFor(plant);
+        treeButton.className = "tree-button " + status + (fxUntil > Date.now() ? " watering" : "");
+        treeButton.disabled = !plant.planted && !selected;
+        treeButton.setAttribute("aria-label", !plant.planted ? (selected ? "Plant Kindred Tree in the planting circle" : "Select the Kindred Tree seed orb first") : status === "germinating" ? "Kindred Tree is germinating" : "Water Kindred Tree");
+        treeButton.innerHTML = treeArt(plant) + waterFx();
+        stageReadout.textContent = !plant.planted ? "UNPLANTED" : status === "germinating" ? "GERMINATING" : stageName(plant.stage).toUpperCase();
+        var statusLabel = status === "unplanted" ? "Awaiting planting" : status === "germinating" ? "Germinating" : status.charAt(0).toUpperCase() + status.slice(1);
+        var stageButtons = ["Seed", "Sprout", "Bloom", "Canopy"].map(function (name, index) {
+          var current = plant.planted && plant.stage === index && status !== "germinating";
+          return '<button type="button" class="stage-jump-btn' + (current ? ' current' : '') + '" data-stage="' + index + '"' + (!plant.planted || current ? ' disabled' : '') + ' aria-label="Set demo growth to ' + name + '">' + name + '</button>';
+        }).join("");
+        treeMeta.innerHTML = '<div class="tree-title-row"><span class="tree-name">Kindred Tree</span><span class="stage-pill">' + (plant.planted ? stageName(plant.stage) : "Seed orb") + '</span></div><div class="status-row"><span class="water-status">' + statusLabel + '</span><span class="next-water">' + nextWaterText(plant, status) + '</span></div><div class="progress-label"><span>' + progress.label + '</span><span>' + progress.amount + '</span></div><div class="progress-track"><div class="progress-fill" style="--progress:' + progress.pct + '%"></div></div><div class="stage-jump"><span class="stage-jump-label">DEMO GROWTH</span><div class="stage-jump-buttons">' + stageButtons + '</div></div>';
+      }
+
+      function renderQuests() {
+        var day = Math.floor(elapsedDays(currentTime));
+        xpCount.textContent = sim.accountXp + " XP";
+        questList.innerHTML = QUESTS.map(function (quest) {
+          var done = !!sim.completedQuests[day + ":" + quest.id];
+          return '<button type="button" class="quest" data-quest="' + quest.id + '"' + (done ? ' disabled' : '') + '><span><span class="quest-name">' + escapeHtml(quest.name) + '</span><span class="quest-reward">' + escapeHtml(quest.note) + ' · +1 XP / +1 water</span></span><span class="quest-state">' + (done ? "DONE" : "COMPLETE") + '</span></button>';
+        }).join("");
+      }
+
+      function renderBounties() {
+        bountyList.innerHTML = BOUNTIES.map(function (bounty) {
+          var claimed = !!sim.claimedBounties[bounty.id];
+          var unlocked = bountyUnlocked(bounty.id, sim);
+          var state = claimed ? "CLAIMED" : unlocked ? "CLAIM" : "LOCKED";
+          return '<button type="button" class="bounty' + (unlocked && !claimed ? ' claimable' : '') + '" data-bounty="' + bounty.id + '"' + (!unlocked || claimed ? ' disabled' : '') + '><span><span class="bounty-name">' + escapeHtml(bounty.name) + '</span><span class="bounty-reward">' + escapeHtml(bounty.note) + ' · +' + bounty.xp + ' XP / +' + bounty.xp + ' water</span></span><span class="bounty-state">' + state + '</span></button>';
+        }).join("");
+      }
+
+      function renderLog() {
+        var wasAtBottom = eventLog.scrollHeight - eventLog.scrollTop - eventLog.clientHeight < 28;
+        eventLog.innerHTML = sim.events.map(function (evt) { return '<div class="event"><span class="event-time">' + shortClock(evt.time) + '</span><span class="event-text">' + escapeHtml(evt.text) + '</span></div>'; }).join("");
+        if (wasAtBottom) eventLog.scrollTop = eventLog.scrollHeight;
+      }
+
+      function render() {
+        demoClock.textContent = clockText(currentTime) + (currentTime >= MAX_TIME ? " · END OF TIMELINE" : "");
+        demoClock.classList.toggle("timeline-ended", currentTime >= MAX_TIME);
+        timelineSlider.value = Math.min(45, elapsedDays(currentTime)).toFixed(1);
+        timelineReadout.textContent = "DAY " + Math.min(45, elapsedDays(currentTime)).toFixed(1);
+        reservoirValue.textContent = sim.reservoir.toFixed(1);
+        gaugeFill.style.setProperty("--water-level", Math.max(0, Math.min(100, sim.reservoir)) + "%");
+        document.querySelectorAll(".speed-btn").forEach(function (btn) { var on = Number(btn.dataset.speed) === speed; btn.classList.toggle("active", on); btn.setAttribute("aria-pressed", String(on)); });
+        renderWallet();
+        renderTree();
+        renderQuests();
+        renderBounties();
+        renderLog();
+      }
+
+      seedCard.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (sim.plant.planted) return;
+        selected = !selected;
+        render();
+      });
+
+      treeButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        var plant = sim.plant;
+        if (!plant.planted) {
+          if (!selected) { nudge("Select the Kindred Tree orb first."); return; }
+          commitAction({ type: "plant" });
+          return;
+        }
+        var status = plantStatus(plant, currentTime);
+        if (status === "germinating") { nudge("Germination is underway. " + remainingTime(plant.germinationEnds - currentTime) + " remain."); return; }
+        if (status === "hydrated") { nudge("Kindred Tree is hydrated. No water spent."); return; }
+        if (sim.reservoir + 0.0001 < TREE.appetite) { nudge("Reservoir low. 1.5 units needed."); return; }
+        commitAction({ type: "water" });
+        fxUntil = Date.now() + 820;
+        render();
+        window.setTimeout(render, 850);
+      });
+
+      questList.addEventListener("click", function (event) {
+        var button = event.target.closest(".quest");
+        if (!button || button.disabled) return;
+        event.stopPropagation();
+        commitAction({ type: "quest", questId: button.dataset.quest });
+      });
+
+      bountyList.addEventListener("click", function (event) {
+        var button = event.target.closest(".bounty");
+        if (!button || button.disabled) return;
+        event.stopPropagation();
+        commitAction({ type: "bounty", bountyId: button.dataset.bounty });
+      });
+
+      treeMeta.addEventListener("click", function (event) {
+        var button = event.target.closest(".stage-jump-btn");
+        if (!button || button.disabled || !sim.plant.planted) return;
+        event.stopPropagation();
+        commitAction({ type: "stage", stage: Number(button.dataset.stage) });
+      });
+
+      document.querySelector(".speed-control").addEventListener("click", function (event) {
+        var btn = event.target.closest(".speed-btn");
+        if (!btn) return;
+        event.stopPropagation();
+        speed = Number(btn.dataset.speed);
+        lastReal = Date.now();
+        render();
+        saveState();
+      });
+
+      timelineSlider.addEventListener("click", function (event) { event.stopPropagation(); });
+      timelineSlider.addEventListener("input", function (event) {
+        event.stopPropagation();
+        currentTime = START + Number(timelineSlider.value) * DAY;
+        selected = false;
+        if (currentTime >= MAX_TIME) speed = 0;
+        sim = derive(currentTime);
+        lastReal = Date.now();
+        render();
+        saveState();
+      });
+
+      document.getElementById("resetBtn").addEventListener("click", function (event) {
+        event.stopPropagation();
+        currentTime = START;
+        speed = 60;
+        journal = [];
+        selected = false;
+        fxUntil = 0;
+        lastReal = Date.now();
+        sim = derive(currentTime);
+        clearSavedState();
+        nudge("Demo reset to Day 0.");
+        render();
+      });
+
+      var restored = loadState();
+      sim = derive(currentTime);
+      render();
+      if (restored && journal.length > 0) nudge("Garden restored from your last visit.");
+      eventLog.scrollTop = eventLog.scrollHeight;
+      window.setInterval(function () {
+        var now = Date.now();
+        var delta = now - lastReal;
+        lastReal = now;
+        if (!speed || currentTime >= MAX_TIME) { saveState(); return; }
+        currentTime = Math.min(MAX_TIME, currentTime + delta * speed);
+        sim = derive(currentTime);
+        if (currentTime >= MAX_TIME) speed = 0;
+        render();
+        saveState();
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
