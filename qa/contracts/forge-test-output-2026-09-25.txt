@@ -1,0 +1,345 @@
+MuseGarden contract test output
+Run: 2026-09-25 (PDT), forge test -vv on the private contracts repo
+Result: 194/194 tests pass, 0 failed; invariant suite: 256 runs, 128,000 calls, 42,950 reverts
+Note: contract source stays private; this log is the full unedited forge output.
+=================================================================
+No files changed, compilation skipped
+
+Ran 4 tests for test/ExperienceTranches.t.sol:ExperienceTranchesTest
+[PASS] testCapBoundEnforcedAt500() (gas: 1497035)
+[PASS] testDecayPruneAndRefill() (gas: 130701894)
+Logs:
+  pruneXp gas, 200 decayed tranches: 567505
+
+[PASS] testFill200CorrectnessAndMarginalGas() (gas: 131764929)
+Logs:
+  grantXp gas, 200th tranche: 1211305
+  xpOf view gas, 200 tranches: 1146640
+
+[PASS] testPartialDecayKeepsLiveTranche() (gas: 278304)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 441.66ms (429.41ms CPU time)
+
+Ran 13 tests for test/LotteryDistributorMerkle.t.sol:LotteryDistributorMerkleTest
+[PASS] testBadProofRevertsOnClaim() (gas: 787415)
+[PASS] testBenchMerkle_100() (gas: 2266084)
+Logs:
+  MERKLE N=100 openDraw gas: 204625
+  MERKLE N=100 executeDraw gas: 1463980
+  MERKLE N=100 claim gas: 189557
+  MERKLE N=100 proof len: 7
+
+[PASS] testBenchMerkle_1000() (gas: 10210198)
+Logs:
+  MERKLE N=1000 openDraw gas: 204725
+  MERKLE N=1000 executeDraw gas: 7225646
+  MERKLE N=1000 claim gas: 192771
+  MERKLE N=1000 proof len: 10
+
+[PASS] testBenchMerkle_2500() (gas: 23929758)
+Logs:
+  MERKLE N=2500 openDraw gas: 204871
+  MERKLE N=2500 executeDraw gas: 17095543
+  MERKLE N=2500 claim gas: 192789
+  MERKLE N=2500 proof len: 10
+
+[PASS] testBenchMerkle_500() (gas: 5376578)
+Logs:
+  MERKLE N=500 openDraw gas: 204675
+  MERKLE N=500 executeDraw gas: 3653569
+  MERKLE N=500 claim gas: 191751
+  MERKLE N=500 proof len: 9
+
+[PASS] testBenchMerkle_5000() (gas: 47145073)
+Logs:
+  MERKLE N=5000 openDraw gas: 205115
+  MERKLE N=5000 executeDraw gas: 33575451
+  MERKLE N=5000 claim gas: 195995
+  MERKLE N=5000 proof len: 13
+
+[PASS] testDeterministicExecution() (gas: 8213816)
+[PASS] testFeeFormulaMatchesReference() (gas: 1448368)
+[PASS] testFullFlowSmall() (gas: 1759668)
+[PASS] testNonWinnerCannotClaimWithValidProof() (gas: 651829)
+[PASS] testTamperedListReverts() (gas: 675157)
+[PASS] testUnsortedListReverts() (gas: 509710)
+[PASS] testWinnerCannotClaimAnotherWinnersProof() (gas: 758014)
+Suite result: ok. 13 passed; 0 failed; 0 skipped; finished in 756.53ms (745.87ms CPU time)
+
+Ran 5 tests for test/GasBenchmark.t.sol:GasBenchmarkTest
+[PASS] testBench_100() (gas: 9202916)
+Logs:
+  N=100 openDraw gas: 7310072
+  N=100 executeDraw gas: 1877380
+  N=100 openDraw gas/entrant: 73100
+  N=100 executeDraw gas/entrant: 18773
+
+[PASS] testBench_1000() (gas: 77319094)
+Logs:
+  N=1000 openDraw gas: 71079509
+  N=1000 executeDraw gas: 5781823
+  N=1000 openDraw gas/entrant: 71079
+  N=1000 executeDraw gas/entrant: 5781
+
+[PASS] testBench_2500() (gas: 191066376)
+Logs:
+  N=2500 openDraw gas: 177582924
+  N=2500 executeDraw gas: 12225303
+  N=2500 openDraw gas/entrant: 71033
+  N=2500 executeDraw gas/entrant: 4890
+
+[PASS] testBench_500() (gas: 39565016)
+Logs:
+  N=500 openDraw gas: 35638926
+  N=500 executeDraw gas: 3717597
+  N=500 openDraw gas/entrant: 71277
+  N=500 executeDraw gas/entrant: 7435
+
+[PASS] testBench_5000() (gas: 385283993)
+Logs:
+  N=5000 openDraw gas: 355694044
+  N=5000 executeDraw gas: 26822072
+  N=5000 openDraw gas/entrant: 71138
+  N=5000 executeDraw gas/entrant: 5364
+
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 515.29ms (513.58ms CPU time)
+
+Ran 45 tests for test/KindredOrb.t.sol:KindredOrbTest
+[PASS] testAdminCanRetuneThresholds() (gas: 461272)
+[PASS] testAttestWateringAppliesStakeWeight() (gas: 598121)
+[PASS] testAttestWateringQuarterStakeIsOnePointFive() (gas: 598326)
+[PASS] testAttestWateringZeroStakeIsUnweighted() (gas: 569722)
+[PASS] testBadThresholdOrderReverts() (gas: 87085)
+[PASS] testCheckpointChangesNoState() (gas: 448943)
+[PASS] testCheckpointEmitsCorrectDeltas() (gas: 710374)
+[PASS] testCheckpointEmptyGroveEmitsNothing() (gas: 38099)
+[PASS] testCheckpointGrantsBetweenEpochsShowPositiveDelta() (gas: 486362)
+[PASS] testCheckpointTwiceSameBlockGivesZeroDelta() (gas: 377883)
+[PASS] testDeactivatedAttesterCannotCheckpoint() (gas: 293768)
+[PASS] testDeactivatedAttesterCannotGrant() (gas: 297207)
+[PASS] testDecayMovesStageDown() (gas: 319139)
+[PASS] testDifferentMusesCanEachPlant() (gas: 382631)
+[PASS] testFertilizeAppliesBonus() (gas: 641839)
+[PASS] testFertilizeCapEnforcedPerEpoch() (gas: 1027028)
+[PASS] testFertilizeEpochResetsAllowance() (gas: 1207477)
+[PASS] testFertilizeRequiresBurnHook() (gas: 170327)
+[PASS] testFertilizeRequiresOwner() (gas: 440469)
+[PASS] testFertilizeUnplantedReverts() (gas: 315911)
+[PASS] testFertilizeZeroXpSeed() (gas: 655386)
+[PASS] testGrantXpStaysUnweighted() (gas: 587069)
+[PASS] testGroveFullAt106() (gas: 13281992)
+[PASS] testMusebookNativeAttesterAccepted() (gas: 390762)
+[PASS] testNonAdminCannotSetFertilizerParams() (gas: 36639)
+[PASS] testNonAdminCannotSetStakeLedger() (gas: 35725)
+[PASS] testNonAdminCannotSetThresholds() (gas: 36527)
+[PASS] testNonAttesterCannotAttestWatering() (gas: 469796)
+[PASS] testNonAttesterCannotCheckpoint() (gas: 158133)
+[PASS] testNonAttesterCannotGrant() (gas: 161494)
+[PASS] testPlantFillOrderAndTokenEqualsSlot() (gas: 292011)
+[PASS] testPlantToCaller() (gas: 139050)
+[PASS] testPlantToCallerTwiceReverts() (gas: 161687)
+[PASS] testSecondPlantBySameMuseReverts() (gas: 167978)
+[PASS] testStageOfUnplantedReverts() (gas: 11611)
+[PASS] testStageThresholds() (gas: 536319)
+[PASS] testThresholdValuesAre100300700() (gas: 23545)
+[PASS] testTokenURI() (gas: 144200)
+[PASS] testTransferDoesNotFreeMuseIdentity() (gas: 325019)
+[PASS] testWateringEmitsAndCounts() (gas: 248697)
+[PASS] testWateringMultiplierCapsAtTwo() (gas: 357838)
+[PASS] testWateringMultiplierFullUnitIsTwo() (gas: 357604)
+[PASS] testWateringMultiplierNoLedgerIsOne() (gas: 18863)
+[PASS] testWateringMultiplierQuarterUnitIsOnePointFive() (gas: 357786)
+[PASS] testWateringMultiplierZeroStakeIsOne() (gas: 337270)
+Suite result: ok. 45 passed; 0 failed; 0 skipped; finished in 13.44ms (12.07ms CPU time)
+
+Ran 16 tests for test/LotteryDistributorPacked.t.sol:LotteryDistributorPackedTest
+[PASS] testBadLengthReverts() (gas: 47200)
+[PASS] testBenchPacked_100() (gas: 3555145)
+Logs:
+  PACKED N=100 openDraw gas: 351060
+  PACKED N=100 executeDraw gas: 1380240
+  PACKED N=100 claim gas: 180076
+  PACKED N=100 calldata bytes: 2400
+
+[PASS] testBenchPacked_1000() (gas: 21626215)
+Logs:
+  PACKED N=1000 openDraw gas: 1676126
+  PACKED N=1000 executeDraw gas: 4729958
+  PACKED N=1000 claim gas: 180076
+  PACKED N=1000 calldata bytes: 24000
+
+[PASS] testBenchPacked_2500() (gas: 50129366)
+Logs:
+  PACKED N=2500 openDraw gas: 3903476
+  PACKED N=2500 executeDraw gas: 8674678
+  PACKED N=2500 claim gas: 180076
+  PACKED N=2500 calldata bytes: 60000
+
+[PASS] testBenchPacked_500() (gas: 11403131)
+Logs:
+  PACKED N=500 openDraw gas: 938070
+  PACKED N=500 executeDraw gas: 2687491
+  PACKED N=500 claim gas: 180076
+  PACKED N=500 calldata bytes: 12000
+
+[PASS] testBenchPacked_5000() (gas: 97277806)
+Logs:
+  PACKED N=5000 openDraw gas: 7659683
+  PACKED N=5000 executeDraw gas: 14837569
+  PACKED N=5000 claim gas: 180076
+  PACKED N=5000 calldata bytes: 120000
+
+[PASS] testCodecRoundTrip() (gas: 930)
+[PASS] testDeterministicExecution() (gas: 10469815)
+[PASS] testFeeFormulaMatchesReference() (gas: 1919521)
+[PASS] testFullFlowSmall() (gas: 2124784)
+[PASS] testNonWinnerCannotClaim() (gas: 949644)
+[PASS] testTamperedListReverts() (gas: 1300442)
+[PASS] testTooManyEntrantsReverts() (gas: 76391606)
+[PASS] testTxSizeBound() (gas: 467)
+[PASS] testUnsortedListRevertsAtOpen() (gas: 1027576)
+[PASS] testWinnersMatchReferenceAlgorithm() (gas: 11122067)
+Suite result: ok. 16 passed; 0 failed; 0 skipped; finished in 2.70s (2.70s CPU time)
+
+Ran 16 tests for test/MuseMall.t.sol:MuseGardenTest
+[PASS] test_buyBurnsPaymentAndMints() (gas: 222423)
+[PASS] test_eachAuraHasItsOwnPath() (gas: 415326)
+[PASS] test_editionCapEnforced() (gas: 440795)
+[PASS] test_everyMintGrantsStageZero() (gas: 308000)
+[PASS] test_evolveAdvancesOneStage() (gas: 403353)
+[PASS] test_evolveCannotSkipStages() (gas: 363322)
+[PASS] test_evolveRequiresHolding() (gas: 141977)
+[PASS] test_evolveRequiresXp() (gas: 342961)
+[PASS] test_evolveToMaxThenReverts() (gas: 526027)
+[PASS] test_noHeadStart() (gas: 190201)
+[PASS] test_pullBurnsAndMintsFromPool() (gas: 246288)
+[PASS] test_royaltyInfo() (gas: 16548)
+[PASS] test_saleHasNoTrackGate() (gas: 123823)
+[PASS] test_tierDistributionSumsTo10000() (gas: 85220)
+[PASS] test_tokenSupplyAndBurn() (gas: 66121)
+[PASS] test_xpIsNotConsumedByEvolving() (gas: 547674)
+Suite result: ok. 16 passed; 0 failed; 0 skipped; finished in 8.30ms (4.28ms CPU time)
+
+Ran 59 tests for test/MuseMallHardening.t.sol:MuseGardenHardeningTest
+[PASS] testFuzz_buyRespectsCapAndBurnsExact(uint256) (runs: 256, μ: 196899, ~: 174817)
+[PASS] testFuzz_evolveNeverSkipsOrExceeds(uint256,uint8) (runs: 256, μ: 382886, ~: 377006)
+[PASS] testFuzz_pullAlwaysMintsValidId(uint8) (runs: 256, μ: 712613, ~: 630015)
+[PASS] testFuzz_royaltyNeverExceedsSalePrice(uint256) (runs: 256, μ: 18019, ~: 17502)
+[PASS] testFuzz_stageUriMatchesStage(uint256) (runs: 256, μ: 402180, ~: 428716)
+[PASS] test_adminCanUpdateRoyalty() (gas: 47083)
+[PASS] test_allAurasTransferableByDefault() (gas: 168907)
+[PASS] test_buyEmitsEventWithBurnedAmount() (gas: 187381)
+[PASS] test_buyUnlistedReverts() (gas: 353281)
+[PASS] test_buyWithoutApprovalReverts() (gas: 49670)
+[PASS] test_buyZeroAmountReverts() (gas: 40654)
+[PASS] test_constructorRejectsZeroXpAddress() (gas: 7446)
+[PASS] test_createAuraBaseStageRequiresZeroXp() (gas: 37571)
+[PASS] test_createAuraEmptyPathReverts() (gas: 33857)
+[PASS] test_createAuraEmptyUriReverts() (gas: 38258)
+[PASS] test_createAuraPathTooLongReverts() (gas: 777078)
+[PASS] test_createAuraThresholdsMustIncrease() (gas: 42530)
+[PASS] test_createAuraZeroMaxSupplyReverts() (gas: 43491)
+[PASS] test_decayScheduleIsConstant() (gas: 5787)
+[PASS] test_decayedXpBlocksEvolve() (gas: 247104)
+[PASS] test_evolveDuringMintCallbackIsSafe() (gas: 678556)
+[PASS] test_grantXpPrunesDecayedTranches() (gas: 251819)
+[PASS] test_grantXpZeroAddressReverts() (gas: 33218)
+[PASS] test_grantXpZeroAmountReverts() (gas: 35354)
+[PASS] test_grantsDecayIndependently() (gas: 260745)
+[PASS] test_mintZeroAmountReverts() (gas: 37829)
+[PASS] test_nonAdminCannotCreateAura() (gas: 52487)
+[PASS] test_nonAdminCannotSetPrice() (gas: 44475)
+[PASS] test_nonAdminCannotSetPullPrice() (gas: 41970)
+[PASS] test_nonAdminCannotSetTierPool() (gas: 45512)
+[PASS] test_nonAdminCannotUpdateRoyalty() (gas: 36176)
+[PASS] test_nonAdminCannotUpdateStageUri() (gas: 45444)
+[PASS] test_nonMinterCannotMint() (gas: 45106)
+[PASS] test_nonOperatorCannotGrantXp() (gas: 44633)
+[PASS] test_pruneXpIsPermissionless() (gas: 168156)
+[PASS] test_pullEmptyTierReverts() (gas: 170221)
+[PASS] test_pullSoldOutTierReverts() (gas: 676827)
+[PASS] test_pullWithoutApprovalReverts() (gas: 46492)
+[PASS] test_reentrantBuyIsBlocked() (gas: 888072)
+[PASS] test_royaltySetterRejectsInvalid() (gas: 61835)
+[PASS] test_setPriceUnknownIdReverts() (gas: 40097)
+[PASS] test_setPullPriceWorksAndEmits() (gas: 43687)
+[PASS] test_setTierBpsWorksAndValidatesSum() (gas: 88612)
+[PASS] test_setTierPoolDuplicateIdReverts() (gas: 45559)
+[PASS] test_setTierPoolUnknownIdReverts() (gas: 41121)
+[PASS] test_stageThresholdUnknownStageReverts() (gas: 14828)
+[PASS] test_supportsInterfaces() (gas: 25214)
+[PASS] test_tierAvailable() (gas: 120866)
+[PASS] test_tokenHasNoMintAuthority() (gas: 33313)
+[PASS] test_tokenZeroTreasuryReverts() (gas: 4275)
+[PASS] test_tooManyTranchesReverts() (gas: 750288137)
+[PASS] test_updateStageUriEmptyUriReverts() (gas: 38289)
+[PASS] test_updateStageUriUnknownIdReverts() (gas: 37179)
+[PASS] test_updateStageUriUnknownStageReverts() (gas: 39562)
+[PASS] test_updateStageUriWorksAndEmits() (gas: 321544)
+[PASS] test_uriBaseStageAndFallback() (gas: 65387)
+[PASS] test_xpDecaysLinearlyPerGrant() (gas: 139731)
+[PASS] test_xpGrantsAccumulate() (gas: 212340)
+[PASS] test_xpIsSoulbound() (gas: 36236)
+Suite result: ok. 59 passed; 0 failed; 0 skipped; finished in 2.28s (2.28s CPU time)
+
+Ran 35 tests for test/LotteryDistributor.t.sol:LotteryDistributorTest
+[PASS] testCancelDrawUnblocksCadence() (gas: 1465380)
+[PASS] testCancelLeavesPoolUntouched() (gas: 511533)
+[PASS] testClaimBurnsFeeAndMints() (gas: 1185641)
+[PASS] testClaimMintsAssignedPrize() (gas: 1576204)
+[PASS] testConstructorRejectsZeroAddresses() (gas: 7784)
+[PASS] testCreateSeasonEnforcesMintableSupply() (gas: 1413659)
+[PASS] testCreateSeasonValidation() (gas: 95774)
+[PASS] testCrossLanguageEntrantsHashVector() (gas: 3043)
+[PASS] testEntrantOrderEnforced() (gas: 578239)
+[PASS] testFeeMultSnapshottedAtExecute() (gas: 1025035)
+[PASS] testFeeUsesSnapshotNotLiveBalance() (gas: 888014)
+[PASS] testFuzz_PoolConservation(uint64,uint8) (runs: 256, μ: 3188259, ~: 2464351)
+[PASS] testFuzz_WinCountAccounting(uint64,uint8,uint8) (runs: 256, μ: 2518192, ~: 2162393)
+[PASS] testFuzz_WinCountOnlyMovesOnExecute(uint64) (runs: 256, μ: 1226650, ~: 1226692)
+[PASS] testLifetimeMaxDrawsCap() (gas: 922222)
+[PASS] testMaxDrawsEnforced() (gas: 497223)
+[PASS] testNonWinnerCannotClaim() (gas: 939218)
+[PASS] testOpenAndExecute() (gas: 922516)
+[PASS] testPhantomExecuteReverts() (gas: 933671)
+[PASS] testPoolDepletedReverts() (gas: 232044)
+[PASS] testPrizeAssignmentDistinct() (gas: 1123830)
+[PASS] testPrizeOfNonWinnerIsZero() (gas: 905567)
+[PASS] testPrizeOutstandingAccounting() (gas: 1241641)
+[PASS] testProgressiveFee() (gas: 480402)
+[PASS] testRarityMultiplier() (gas: 1006864)
+[PASS] testSecondDrawBlockedUntilExecuted() (gas: 494802)
+[PASS] testSetParamsBounds() (gas: 230433)
+[PASS] testSetParamsCannotStrandBelowDrawCount() (gas: 1387590)
+[PASS] testSweepAfterWindow() (gas: 1030742)
+[PASS] testSweepIsPermissionless() (gas: 976368)
+[PASS] testSweepReturnsPrizesToPool() (gas: 996943)
+[PASS] testTooManyEntrantsReverts() (gas: 12863921)
+[PASS] testWinCountAccumulatesAcrossDraws() (gas: 1739347)
+[PASS] testWinCountIncrementsOnExecute() (gas: 929812)
+[PASS] testWinnersTargetDefaultsToWinnersPerDraw() (gas: 1147267)
+Suite result: ok. 35 passed; 0 failed; 0 skipped; finished in 26.36s (26.36s CPU time)
+
+Ran 1 test for test/MuseMallInvariant.t.sol:MuseGardenInvariantTest
+[PASS]
+MuseGardenInvariantTest invariants:
+[PASS] invariant_editionCapsHold
+[PASS] invariant_exactBurnAccounting
+[PASS] invariant_saleNeverCustodiesTokens
+[PASS] invariant_stagesWithinPath
+[PASS] invariant_supplyNeverIncreases
+ MuseGardenInvariantTest invariants (runs: 256, calls: 128000, reverts: 42950)
+
+╭-------------+-------------+-------+---------+----------╮
+| Contract    | Selector    | Calls | Reverts | Discards |
++========================================================+
+| SaleHandler | approveSale | 42199 | 0       | 0        |
+|-------------+-------------+-------+---------+----------|
+| SaleHandler | buy         | 42950 | 42950   | 0        |
+|-------------+-------------+-------+---------+----------|
+| SaleHandler | pull        | 42851 | 0       | 0        |
+╰-------------+-------------+-------+---------+----------╯
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 68.24s (68.23s CPU time)
+
+Ran 9 test suites in 74.00s (101.32s CPU time): 194 tests passed, 0 failed, 0 skipped (194 total tests)
+EXIT:0
