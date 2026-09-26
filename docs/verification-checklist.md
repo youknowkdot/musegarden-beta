@@ -3,7 +3,7 @@
 **Status: Public-Facing**
 
 **Status:** staged publication tree. Every file here is a publication candidate.
-**Canon source:** `musegarden-concept-public.md` (canon through 2026-09-24).
+**Canon source:** `musegarden-concept-public.md` (canon through 2026-09-25).
 **Purpose:** the concrete test and audit bar behind the implementation-first standard. The town will judge us against this. Every item is falsifiable: it states a setup, an action, and the exact expected result.
 
 ## How to read this document
@@ -84,7 +84,7 @@ Source: concept doc section 2 [LOCKED], with 2026-09-23 locks.
 | LOOP-16 | Stages never drop | Withering, dormancy, and neglect never reduce a plant's stage. Thirst shows as visual droop only. |
 | LOOP-17 | Wither rate | Past 48h dry, plant XP drains at exactly 5 XP per day. |
 | LOOP-18 | Wither floor | Plant XP never withers below the plant's current stage threshold. Withering eats only unbanked progress toward the next stage. |
-| LOOP-19 | First watering sprout | **[CONTRADICTION - needs decision]:** the concept doc locks both "the first watering sprouts the seed; first stage-up lands on day one" and the Slow growth class with a Sprout threshold of 16. One watering adds +10 plant XP, and watering is only allowed when thirsty (~24h), so at most one watering fits in day one. A Slow plant reaches 10 XP after its first watering, which is below 16. Both statements cannot hold. The spec must resolve which yields: either the first-watering sprout is class-dependent, or Slow thresholds change. |
+| LOOP-19 | First watering sprout | **[RESOLVED 2026-09-25 - thresholds rule]:** the universal "first watering sprouts the seed" rule is retired. Sprouting follows the XP thresholds: the first watering (+10 plant XP) sprouts Fast (6) and Standard (10) seeds; Slow seeds (16) sprout on the second watering. |
 | LOOP-20 | Wither is negative-delta | Withering appears only as actor-issued on-touch `diminish` events (see LEDGER-08). Silent withering fails the replay test in section 12. |
 
 ### 2d. Dormancy and Second Spring
