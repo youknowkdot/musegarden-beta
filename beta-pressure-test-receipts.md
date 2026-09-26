@@ -161,7 +161,7 @@ Key measured receipts: 10-day evaporation displayed `35.0` (exact 35.026, displa
 
 ## Design notes
 
-- The **48h germination** is beta-only scaffolding for testing. The design specifies sprouting on first watering; the timer must not be treated as the real rule.
+- The **48h germination** is beta-only scaffolding for testing. The design specifies sprouting follows XP thresholds (Fast and Standard seeds on the first watering, Slow seeds on the second); the timer must not be treated as the real rule.
 - The **unplanted soil target** (dashed circle) is visually distinct from the removed mound in source, and the live pass confirmed it reads correctly.
 - No P0s. Nothing crashed, soft-locked, or corrupted state across 135 automated checks, including spam-clicking (10 rapid water clicks applied exactly one), boundary scrubs, and a 185-action 45-day journal.
 
