@@ -508,7 +508,7 @@
         if (plant.xp >= TREE.thresholds[2]) plant.stage = 3;
         else if (plant.xp >= TREE.thresholds[1]) plant.stage = 2;
         else if (plant.germinated && plant.xp >= TREE.thresholds[0]) plant.stage = 1;
-        if (plant.stage >= 1) plant.sprouted = true;
+        if (plant.stage > old && plant.stage >= 1) plant.sprouted = true;
         if (plant.stage > old) addEvent(target.events, at, "Kindred Tree reached " + stageName(plant.stage) + ".");
       }
 
