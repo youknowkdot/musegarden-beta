@@ -1,7 +1,8 @@
 # MuseGarden Beta Slice: Pressure Test Receipts
 
 **Date:** 2026-09-25
-**Status:** Public-Facing. All findings resolved and re-verified 2026-09-25. No open issues.
+**Status: Public-Facing**
+**Outcome:** All findings resolved and re-verified 2026-09-25. No open issues.
 **Target:** The beta slice as a single static HTML file (inline CSS/JS, ~50KB), served from a local test server.
 **Live pass target:** A temporary public test URL used only so a test browser could reach the page. Removed after the pass.
 **Scope:** Find everything that can go wrong, test far beyond the happy path, keep all receipts.
@@ -52,6 +53,8 @@ A Node.js harness extracted the page's exact inline script and executed it under
 
 Key measured receipts: 10-day evaporation displayed `35.0` (exact 35.026, display rounds to 1 decimal); a 45-day greedy playthrough kept the reservoir within [0, 100]; withering for 1.2 days from 26 XP landed at ~20.1 XP; 1440x advanced about 1 sim-day per real second; post-germination watering moved XP from 16 to 26; timeline replay of 45 → 0 → 45 reproduced byte-identical state.
 
+**Reproducibility pin (2026-09-25):** the build under test is `musegarden-beta-slice.html` at this repo's root (git blob `19f5335eadf1a863f87be4c60cc96da18c7490be`). The harness is published at `qa/harness/` with exact commands and expected results in `qa/harness/README.md`. Re-running against the pinned build: `node qa/harness/harness.js` gives 121 PASS, 1 FAIL (the single FAIL is M4 "no localStorage", superseded by the 2026-09-25 persistence decision, see P2-4); `node qa/harness/edge2.js` gives 8 PASS, 0 FAIL. The 122/0 figure above was recorded against the pre-fix build during QA; the pin reflects the final shipped build.
+
 ---
 
 ## Findings
@@ -64,6 +67,7 @@ Key measured receipts: 10-day evaporation displayed `35.0` (exact 35.026, displa
 - **Actual:** Each bounty granted equal XP and reservoir units: 8, 15, and 25 water respectively, 48 water total across all three. The bounty cards openly advertised "+XP / +water", so the code was self-consistent; the mismatch was against the written spec.
 - **Why it mattered:** 48 water is about 80% of a full reservoir. In a demo about reservoir management, that is a material economy input.
 - **Resolution (2026-09-25):** XP plus equal reservoir water is the intended design. The built UI was correct and the spec text was wrong, so no code change was needed. The footer claim stands as accurate.
+- **Spec diff (pinned 2026-09-25):** the amended spec was the *beta spec text*, not the canon. Before: "bounty rewards were XP only (8 / 15 / 25 XP)." After: "bounty rewards are 8 / 15 / 25 XP plus an equal number of reservoir units." Basis: the locked canon (`musegarden-concept-public.md`: "1 XP earned = 1 reservoir unit, on every earn (quests and bounties)"), locked 2026-09-23, two days before this QA run. No canon lock was moved; the canon was confirmed on 2026-09-25 and the beta text was corrected to match it.
 
 ### P2-1. Slider dragged to day 45 did not auto-pause; speed button misled
 
