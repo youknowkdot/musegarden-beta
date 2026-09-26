@@ -48,7 +48,7 @@ The live-browser pass completed 2026-09-25 against the temporary test URL (since
 
 ## Method
 
-A Node.js harness extracted the page's exact inline script and executed it under a simulated DOM with a deterministic clock, driving the real code paths: planting, watering, quest and bounty claims, demo stage jumps, timeline scrubbing (0 to 45 days), all five speeds, resets, and spam-clicking. **122 checks passed, 0 failed.** Two edge-case batches added 13 more checks (13 pass, 1 real finding). Every discrepancy between test expectations and app behavior was investigated with focused debug scripts; all resolved as test-script expectation errors except the slider-to-45 finding. Source audits covered what the harness could not (timer throttling, storage behavior, art markup). The build under test was not modified during QA.
+A Node.js harness extracted the page's exact inline script and executed it under a simulated DOM with a deterministic clock, driving the real code paths: planting, watering, quest and bounty claims, demo stage jumps, timeline scrubbing (0 to 45 days), all five speeds, resets, and spam-clicking. **122 checks passed, 0 failed.** Two edge-case batches added 13 more checks (13 pass, 1 real finding). A follow-up batch added 6 checks for the P2-7 demo-jump-then-water bounty exploit (6 pass, 1 real finding, fixed and re-verified) plus a 27-check re-run of the full P2 regression suite (27 pass, 0 failed). Every discrepancy between test expectations and app behavior was investigated with focused debug scripts; all resolved as test-script expectation errors except the slider-to-45, P2-6, and P2-7 findings. Source audits covered what the harness could not (timer throttling, storage behavior, art markup). The build under test was not modified during QA.
 
 Key measured receipts: 10-day evaporation displayed `35.0` (exact 35.026, display rounds to 1 decimal); a 45-day greedy playthrough kept the reservoir within [0, 100]; withering for 1.2 days from 26 XP landed at ~20.1 XP; 1440x advanced about 1 sim-day per real second; post-germination watering moved XP from 16 to 26; timeline replay of 45 → 0 → 45 reproduced byte-identical state.
 
@@ -111,7 +111,15 @@ Key measured receipts: 10-day evaporation displayed `35.0` (exact 35.026, displa
 - **Repro (live):** Fresh plant → click the demo buttons straight to Canopy (skipping Sprout and Bloom) → the "Sprout Emerges" bounty unlocked and was claimable.
 - **Expected:** A bounty named "Sprout Emerges" should require the tree to have been a Sprout.
 - **Actual:** The unlock condition was `stage >= 1`, so jumping straight to Canopy satisfied it. Each demo click fired exactly once with correct XP (Sprout 16, Bloom 128, Canopy 400), so the issue was the bounty gate, not the demo buttons.
-- **Resolution (2026-09-25):** Fixed. The bounty now requires the tree to have genuinely reached Sprout, through germination completing or watering-driven XP growth. Demo jumps cannot unlock it; a naturally grown sprout unlocks and claims normally.
+- **Resolution (2026-09-25):** Fixed. The bounty now requires the tree to have genuinely reached Sprout, through germination completing or watering-driven XP growth. A naturally grown sprout unlocks and claims normally.
+
+### P2-7. Demo jump to Canopy followed by watering unlocked "Sprout Emerges"
+
+- **Severity:** P2
+- **Repro (harness):** Fresh plant → water (germination starts) → demo jump straight to Canopy → scrub 36h (thirsty) → water. The "Sprout Emerges" bounty unlocked and was claimable, even though the tree never genuinely occupied Sprout.
+- **Expected:** Demo jumps never unlock the bounty, per the P2-6 fix.
+- **Actual:** The P2-6 fix kept the demo jump itself from setting the sprouted flag, but watering afterward ran `updateStage()`, whose `stage >= 1` gate set sprouted on the already-jumped stage. The direct-jump path stayed locked; only jump-then-water leaked.
+- **Resolution (2026-09-25):** Fixed. `updateStage()` now sets the sprouted flag only on a genuine stage increase (stage above its previous value), never on a stage that merely persists. Verified: 6/6 new checks pass (exploit path stays locked, claim attempt grants nothing, natural germination still unlocks and claims 15 XP + 15 water, jump-to-Sprout then water stays locked) and the full P2 regression suite passes 27/27 with no regressions.
 
 ### UX nits from the live pass
 
