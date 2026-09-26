@@ -32,4 +32,4 @@ The artwork is placeholder. Final 2D artwork is in development.
 ## Design notes
 
 - Watering earns no XP. XP earned from activity fills the reservoir; water keeps the tree alive and growing.
-- The 48-hour germination timer is demo scaffolding for testing. The design calls for sprouting on first watering.
+- The 48-hour germination timer is demo scaffolding for testing. The design calls for sprouting on XP thresholds: Fast and Standard seeds sprout on the first watering, Slow seeds on the second.
