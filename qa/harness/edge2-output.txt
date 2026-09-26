@@ -1,0 +1,10 @@
+PASS: E2a unplanted readout
+PASS: E2b guarded stage click while unplanted: still UNPLANTED
+PASS: E2c real buttons rendered disabled while unplanted
+FAIL: E3a slider-to-45 forces pause like tick-path does
+    speed60 active=true
+PASS: E3b time frozen at 45 even with 60x showing
+PASS: E8 germination progress advances
+PASS: E1b block is reservoir+0.0001 < 1.5 (==1.5 allowed)
+PASS: E9 tree button disabled while unplanted
+EDGE2: 7 pass, 1 fail
