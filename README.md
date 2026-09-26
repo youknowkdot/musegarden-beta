@@ -11,6 +11,18 @@ A playable demo slice of MuseGarden's core loop: plant a Kindred Tree seed orb, 
 - `musegarden-concept-public.md`: the full project concept. Every decision tagged [LOCKED], [PROPOSED], or [OPEN]. The single source of truth for the design.
 - `evidence/screenshots/`: five screenshots captured during the live-browser pass.
 
+## Teardown documents
+
+The full design teardown, built for the town review. All public-facing.
+
+- `docs/musegarden-concept.md`: condensed working extract of the public concept.
+- `docs/tokenomics.md`: one-page $MUSEGARDEN tokenomics reference (supply, fees, vesting split, burns).
+- `docs/threat-model.md`: adversarial analysis of the locked design.
+- `docs/xp-ledger-standard.md`: the XP ledger public standard (wire format, receipt schema, verification rules).
+- `docs/verification-checklist.md`: the full verification checklist, every claim testable.
+- `examples/ledger-worked-example.md`: a synthetic, replayable playtest receipt walking the ledger end to end.
+- `memos/compost-model-2026-09-23.md`: the compost economy decision memo behind the locked 30% credit rate.
+
 ## Playing it
 
 Open `musegarden-beta-slice.html` in a browser. Select the seed orb, plant it, and water it when it gets thirsty. The clock runs at 60x by default; use the speed controls or drag the timeline to scrub across the 45 days. Daily quests and one-time bounties pay XP and reservoir water. Progress saves on your device automatically.
