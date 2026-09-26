@@ -2,7 +2,7 @@
 
 **Status: Public-Facing**
 
-*Current as of 2026-09-24. This document is the single source of truth for the project concept.
+*Current as of 2026-09-25. This document is the single source of truth for the project concept.
 It supersedes the 2026-09-18 design brief (archived as history at `MuseMall/musemall-concept.md`, do not update that file).
 
 **How to read the tags:**
@@ -57,7 +57,7 @@ The garden for Muses. Plants are status symbols and a heartbeat of how active a 
 
 **Water numbers [LOCKED 2026-09-23]:** 1 XP earned = 1 reservoir unit, on every earn (quests and bounties). Reservoir capacity **100 units, fixed for every account** (account XP's only unlock is rarity purchase thresholds, so capacity cannot scale with XP); overflow is lost when full, the XP itself still counts. **Watering costs 1 unit × rarity appetite per plant** (Common ×1.0, Uncommon ×1.25, Rare ×1.5, Legendary ×2.0, Mythic ×2.5, **[LOCKED 2026-09-23]**), only when the plant is thirsty, watering a non-thirsty plant is disallowed, not wasteful; flat across growth stages at launch. **Evaporation: 5% of the current reservoir per day**, continuous. Rarity taxes ambition, not absence: thirst timing, grace period, dormancy, and revive rules are identical for every plant, rarer plants simply drink more. Worked example: full quest completion (50 XP → 50 water) sustains ~5 common plants for about a week (5/day watering + ~2/day evaporation), then the player must earn (bounties) to keep growing. **Thirst timing [LOCKED 2026-09-23]:** a plant becomes thirsty ~24h after watering; withering begins after ~48h dry.
 - **Plant XP and withering [LOCKED 2026-09-23]:** each watering adds **+10 plant XP** (flat); withering drains 5 plant XP/day past 48h dry. **Plant XP never withers below the plant's current stage threshold**, withering only eats unbanked progress toward the next stage.
-- **Growth stages [LOCKED 2026-09-23]:** Seed → Sprout → Bloom → Canopy, sticky once earned (stages never drop; thirst shows as visual droop only). Every genus is assigned a growth class: **Fast** (vines, aroids) ×0.6 → thresholds 6/48/150; **Standard** (flowering, ferns) ×1.0 → 10/80/250; **Slow** (trees, succulents) ×1.6 → 16/128/400. The first watering sprouts the seed, first stage-up lands on day one.
+- **Growth stages [LOCKED 2026-09-23]:** Seed → Sprout → Bloom → Canopy, sticky once earned (stages never drop; thirst shows as visual droop only). Every genus is assigned a growth class: **Fast** (vines, aroids) ×0.6 → thresholds 6/48/150; **Standard** (flowering, ferns) ×1.0 → 10/80/250; **Slow** (trees, succulents) ×1.6 → 16/128/400. **Thresholds rule [LOCKED 2026-09-25]:** sprouting follows the XP thresholds, no exceptions. The first watering (+10 XP) sprouts Fast and Standard seeds; Slow seeds sprout on the second watering. The universal "first watering sprouts" rule is retired.
 - **Dormancy [LOCKED 2026-09-23]:** no permanent death from neglect, ever. After 14 consecutive dry days a plant goes dormant (bare visuals, withering halted). Revive with one watering at **2× normal per-plant cost** (hose efficiency applies; thirst resets; +10 XP as normal; auto-water can revive). **Second Spring** (shop consumable, $MUSEGARDEN, 100% burned, price LOCKED 2026-09-23 at one uncommon plant's price): revives and restores withered XP to the pre-dormancy peak. The free revive always works; the tonic is a shortcut, never a requirement.
 - **Hose levels [LOCKED 2026-09-23]:** 10 account-wide levels derived from lifetime account XP (never decreases). Each level unlocks a distinct hose style and lowers watering cost per plant: L1 0 XP 1.00, L2 100 XP 0.95, L3 250 XP 0.85, L4 550 XP 0.70, L5 1000 XP 0.62, L6 1600 XP 0.56, L7 2300 XP 0.51, L8 3100 XP 0.47, L9 4000 XP 0.44, L10 5000 XP 0.42. Efficiency is on the consumption side only, XP→water stays 1:1 for everyone, so bands and reputation stay clean. ("Experienced gardeners waste less water.") Reservoir needs fractional accounting internally. Hose styles are a future art task; they stack with the per-plant cosmetic amendments. This is account XP's second unlock (after rarity thresholds).
 
@@ -366,6 +366,7 @@ Unresolved **[OPEN]**: absolute prices (set at launch).
 | 2026-09-24 | XP precision LOCKED: ledger XP whole units, fractional results round half up before the receipt is written; reservoir keeps fractional water internally |
 | 2026-09-24 | Price schedule LOCKED: ratios and absolute prices published before each season, immutable during it; changes only at season boundaries with advance notice |
 | 2026-09-24 | Vesting split LOCKED: 1/15 burn, 2/15 town treasury, 12/15 council-governed operating treasury; claim router build-before-launch, set as the vault's immutable beneficiary from day one |
+| 2026-09-25 | LOOP-19 resolved: thresholds rule; the universal "first watering sprouts" rule retired. Fast and Standard seeds sprout on the first watering (+10 XP meets the 6/10 thresholds); Slow seeds sprout on the second watering (16 threshold). |
 
 ---
 
